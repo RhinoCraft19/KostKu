@@ -1,0 +1,51 @@
+{
+  "metadata": {
+    "title": "KostKu - Manajemen Kost",
+    "description": "Aplikasi manajemen kost terbaik di Indonesia"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "kosts": "Kost",
+    "rooms": "Kamar",
+    "tenants": "Penghuni",
+    "payments": "Pembayaran",
+    "reports": "Laporan",
+    "settings": "Pengaturan",
+    "logout": "Keluar"
+  },
+  "auth": {
+    "login": "Masuk",
+    "register": "Daftar",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Lupa Password?",
+    "noAccount": "Belum punya akun?",
+    "hasAccount": "Sudah punya akun?"
+  },
+  "common": {
+    "save": "Simpan",
+    "cancel": "Batal",
+    "delete": "Hapus",
+    "edit": "Edit",
+    "create": "Buat",
+    "search": "Cari",
+    "loading": "Memuat...",
+    "error": "Terjadi kesalahan",
+    "success": "Berhasil",
+    "confirm": "Konfirmasi"
+  },
+  "landing": {
+    "heroTitle": "Kelola Kost Anda dengan Mudah",
+    "heroDescription": "Platform manajemen kost terlengkap di Indonesia. Kelola kamar, penghuni, pembayaran, dan laporan keuangan dalam satu aplikasi.",
+    "getStarted": "Mulai Sekarang",
+    "login": "Masuk",
+    "feature1Title": "Manajemen Kamar",
+    "feature1Desc": "Kelola kamar dan fasilitas dengan mudah",
+    "feature2Title": "Pembayaran Online",
+    "feature2Desc": "Terima pembayaran via Midtrans & transfer manual",
+    "feature3Title": "Laporan Keuangan",
+    "feature3Desc": "Pantau pendapatan dan pengeluaran real-time",
+    "feature4Title": "Multi-Role",
+    "feature4Desc": "Akses untuk pemilik, admin, dan penghuni"
+  }
+}

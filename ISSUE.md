@@ -1,356 +1,630 @@
-# Issue: Setup Next.js 16 Frontend Project
-
-## 📋 Overview
-Setup project frontend KostKu menggunakan **Next.js 16** dengan App Router, TypeScript, dan semua dependency **latest version** (Updated via Context7 - April 2026).
+# Issue: Reorganisasi Layout System - Modular & Reusable
 
 **Priority:** High  
-**Estimated Time:** 1-2 hari  
-**Status:** To Do
+**Estimated Time:** 3-4 jam  
+**Status:** To Do  
+**Labels:** `frontend`, `refactor`, `layout`, `architecture`
 
 ---
 
-## 🎯 Goals
-- [ ] Initialize Next.js 16 project dengan TypeScript
-- [ ] Setup TailwindCSS 4 dan shadcn/ui components v4 (latest)
-- [ ] Konfigurasi struktur folder sesuai best practice
-- [ ] Install semua dependency **latest version**
-- [ ] Setup environment variables template
-- [ ] Konfigurasi i18n (next-intl v3) untuk ID/EN
-- [ ] Setup basic layout dan halaman awal
+## 📋 Overview
+
+Reorganisasi layout system KostKu dari pendekatan Next.js Route Groups `(auth)`, `(dashboard)` menjadi **komponen layout terpisah** di folder `components/layouts/`. Tujuannya agar layout lebih modular, reusable, dan mudah dipakai oleh developer junior atau AI model untuk membuat halaman baru.
+
+**Masalah Saat Ini:**
+- Layout tersebar di folder route groups `(auth)/layout.tsx`, `(dashboard)/layout.tsx`
+- Sulit di-reuse karena terikat ke folder structure Next.js
+- Tidak fleksibel — layout hanya bisa dipakai oleh route di dalam folder yang sama
+- Junior programmer perlu pahami Next.js routing convention dulu sebelum bisa bikin layout baru
+
+**Solusi:**
+- Pindahkan semua layout ke `components/layouts/` sebagai komponen React terpisah
+- Setiap layout punya props yang jelas dan mudah dipahami
+- Layout bisa dipakai di halaman mana saja dengan import sederhana
+- Navigation items bisa di-customize per role melalui props
 
 ---
 
-## 📁 Deliverables
-
-### 1. Project Initialization
-```bash
-# Inisialisasi project dengan shadcn template (Next.js 16 + Tailwind 4)
-npx shadcn@latest init --yes --template next --base-color slate
-
-# Atau manual installation dengan versi terbaru:
-npm install next@latest react@latest react-dom@latest
-```
-
-**Checklist:**
-- [ ] Project name: `kostku`
-- [ ] **Next.js 16.x** (latest - April 2026)
-- [ ] **React 19.x** (latest)
-- [ ] **TypeScript 5.8+** (enabled)
-- [ ] **Tailwind CSS 4.x** (enabled)
-- [ ] **ESLint 9.x** (enabled)
-- [ ] App Router: enabled
-- [ ] Turbopack: enabled (dev mode - default di Next.js 16)
-- [ ] src directory: disabled (gunakan root)
-- [ ] Import alias: `@/*`
-
-### 2. Install shadcn/ui Components (Latest)
-Install components yang dibutuhkan untuk MVP:
-
-```bash
-npx shadcn@latest add \
-  button \
-  card \
-  input \
-  label \
-  select \
-  table \
-  dialog \
-  dropdown-menu \
-  avatar \
-  badge \
-  toast \
-  sonner \
-  sheet \
-  tabs \
-  textarea \
-  calendar \
-  popover \
-  command \
-  checkbox \
-  radio-group \
-  separator \
-  skeleton \
-  progress \
-  alert \
-  alert-dialog
-```
-
-**Checklist:**
-- [ ] Button, Card, Input, Label (basic UI)
-- [ ] Table, Dialog, Dropdown (data display)
-- [ ] Toast/Sonner (notifications)
-- [ ] Calendar, Date Picker (booking/payment dates)
-- [ ] Form components (checkbox, radio, select)
-- [ ] Loading states (skeleton, progress)
-- [ ] Feedback (alert, alert-dialog)
-
-### 3. Install Core Dependencies (Latest Versions via Context7)
-
-```bash
-# State Management (Zustand v5.0+ - latest)
-npm install zustand@latest
-
-# Data Fetching (TanStack Query v5.66+ - latest)
-npm install @tanstack/react-query@latest @tanstack/react-query-devtools@latest
-
-# Forms & Validation (React Hook Form v7.54+ + Zod v3.24+)
-npm install react-hook-form@latest @hookform/resolvers@latest zod@latest
-
-# Internationalization (next-intl v4 - support Next.js 16)
-npm install next-intl@latest
-
-# Icons (Lucide React v0.475+)
-npm install lucide-react@latest
-
-# Date Handling (date-fns v4)
-npm install date-fns@latest
-
-# Classname Utilities (latest)
-npm install clsx@latest tailwind-merge@latest
-
-# Dashboard Charts (Recharts v2.15+)
-npm install recharts@latest
-
-# Additional utilities
-npm install server-only@latest
-```
-
-**Checklist:**
-- [ ] Zustand v5.0+ (latest stable)
-- [ ] TanStack Query v5.66+ (server state)
-- [ ] React Hook Form v7.54+ + Zod v3.24+ (forms)
-- [ ] next-intl v4 (support Next.js 16)
-- [ ] lucide-react v0.475+ (icons)
-- [ ] date-fns v4 (date formatting)
-- [ ] clsx v2.1+ + tailwind-merge v3.0+ (utilities)
-- [ ] recharts v2.15+ (charts)
-
-### 4. Install Dev Dependencies (Latest)
-
-```bash
-# Type definitions (TypeScript 5.8+)
-npm install -D typescript@latest @types/node@22 @types/react@latest @types/react-dom@latest
-
-# Utilities
-npm install -D prettier@3.5 prettier-plugin-tailwindcss@latest
-
-# ESLint config (Next.js 16 + ESLint 9)
-npm install -D eslint@9 eslint-config-next@latest
-```
-
-**Checklist:**
-- [ ] TypeScript 5.8+ + type definitions
-- [ ] Prettier v3.5 + Tailwind v4 plugin
-- [ ] ESLint 9.x + Next.js 16 config
-
-### 5. Project Structure Setup
-
-Buat folder structure berikut:
+## 🗂️ Struktur Folder Baru
 
 ```
 app/
-├── (auth)/
-│   ├── login/
-│   ├── register/
-│   ├── forgot-password/
-│   └── reset-password/
-├── (dashboard)/
-│   ├── owner/
-│   ├── admin/
-│   └── tenant/
-├── api/
-├── layout.tsx
-├── page.tsx
+├── page.tsx                          # Redirect ke /id (default locale)
+├── layout.tsx                        # Root layout (html, body, font)
+├── not-found.tsx
+├── manifest.ts
+├── robots.ts
+├── sitemap.ts
 ├── globals.css
-└── not-found.tsx
+│
+└── [locale]/
+    ├── layout.tsx                    # Locale layout (NextIntlClientProvider + Providers)
+    ├── loading.tsx                   # Global loading spinner
+    ├── error.tsx                     # Global error boundary
+    ├── page.tsx                      # Landing page → pakai LayoutLanding
+    │
+    ├── (auth)/
+    │   ├── login/page.tsx            # → pakai LayoutAuth
+    │   ├── register/page.tsx         # → pakai LayoutAuth
+    │   ├── forgot-password/page.tsx  # → pakai LayoutAuth
+    │   └── reset-password/page.tsx   # → pakai LayoutAuth
+    │
+    ├── owner/
+    │   ├── dashboard/page.tsx        # → pakai LayoutOwner
+    │   ├── kosts/page.tsx            # → pakai LayoutOwner
+    │   ├── tenants/page.tsx          # → pakai LayoutOwner
+    │   ├── payments/page.tsx         # → pakai LayoutOwner
+    │   ├── reports/page.tsx          # → pakai LayoutOwner
+    │   └── settings/page.tsx          # → pakai LayoutOwner
+    │
+    ├── admin/
+    │   ├── dashboard/page.tsx        # → pakai LayoutAdmin
+    │   ├── tenants/page.tsx          # → pakai LayoutAdmin
+    │   ├── payments/page.tsx         # → pakai LayoutAdmin
+    │   ├── maintenance/page.tsx      # → pakai LayoutAdmin
+    │   └── announcements/page.tsx    # → pakai LayoutAdmin
+    │
+    └── tenant/
+        ├── dashboard/page.tsx        # → pakai LayoutTenant
+        ├── payments/page.tsx         # → pakai LayoutTenant
+        ├── history/page.tsx          # → pakai LayoutTenant
+        └── maintenance/page.tsx      # → pakai LayoutTenant
 
 components/
-├── ui/                    # shadcn components (auto-generated)
-├── layouts/               # Dashboard layouts
-├── forms/                 # Form components
-├── tables/                # Data tables
-├── charts/                # Dashboard charts
-└── shared/                # Shared utilities
-
-lib/
-├── utils.ts               # Utility functions
-├── constants.ts           # App constants
-└── validations/           # Zod schemas
-
-hooks/                     # Custom React hooks
-stores/                    # Zustand stores
-types/                     # TypeScript types
-i18n/                      # Internationalization
-├── messages/
-│   ├── id.json
-│   └── en.json
-├── config.ts
-└── request.ts             # next-intl server config
-
-public/
-├── images/
-├── fonts/                 # Jika pakai local fonts
-└── manifest.json
+├── layouts/                          # 🔥 FOLDER LAYOUTS (BARU)
+│   ├── layout-auth.tsx               # Layout untuk halaman auth (login, register, dll)
+│   ├── layout-dashboard.tsx          # Base layout dashboard (sidebar + header + content)
+│   ├── layout-landing.tsx            # Layout untuk landing page (header + hero + footer)
+│   ├── layout-owner.tsx              # Layout khusus owner (extend LayoutDashboard)
+│   ├── layout-admin.tsx              # Layout khusus admin (extend LayoutDashboard)
+│   ├── layout-tenant.tsx             # Layout khusus tenant (extend LayoutDashboard)
+│   └── index.ts                      # Export semua layouts
+│
+├── ui/                               # shadcn components (sudah ada)
+├── shared/                           # Shared components (sudah ada)
+└── providers/                        # Providers (sudah ada)
 ```
 
-**Checklist:**
-- [ ] Create folder structure
-- [ ] Add .gitkeep atau placeholder files
+---
 
-### 6. Configuration Files (Next.js 16 + Tailwind 4)
+## 🎯 Cara Pakai Layout Baru
 
-#### Create `next.config.ts` (TypeScript config):
-```typescript
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  // Next.js 16 default menggunakan Turbopack untuk dev
-  turbopack: {
-    // Konfigurasi Turbopack jika diperlukan
-  },
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "*.supabase.co",
-      },
-      {
-        protocol: "https",
-        hostname: "localhost",
-      },
-    ],
-  },
-  // Experimental features Next.js 16
-  experimental: {
-    // ppr: true, // Partial Prerendering (now stable in 16)
-    // dynamicIO: true, // Dynamic IO (stable in 16)
-  },
-};
-
-export default nextConfig;
+### Sebelum (Route Groups — Sulit):
+```tsx
+// Harus buat layout.tsx di setiap route group
+// File: app/[locale]/(auth)/layout.tsx
+// File: app/[locale]/(dashboard)/layout.tsx
+// Tidak bisa reuse layout di tempat lain
 ```
 
-#### Create `tailwind.config.ts` (Tailwind CSS 4):
-```typescript
-import type { Config } from "tailwindcss"
+### Sesudah (Komponen Layout — Mudah):
+```tsx
+// Import layout dan wrap children — selesai!
+import { LayoutAuth } from "@/components/layouts";
+import { LayoutOwner } from "@/components/layouts";
+import { LayoutTenant } from "@/components/layouts";
 
-const config: Config = {
-  darkMode: ["class"],
-  content: [
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
-  theme: {
-    extend: {
-      // Custom colors untuk KostKu brand
-      colors: {
-        brand: {
-          50: "#eff6ff",
-          100: "#dbeafe",
-          200: "#bfdbfe",
-          300: "#93c5fd",
-          400: "#60a5fa",
-          500: "#3b82f6",
-          600: "#2563eb",
-          700: "#1d4ed8",
-          800: "#1e40af",
-          900: "#1e3a8a",
-        },
-      },
-      fontFamily: {
-        sans: ["Inter", "sans-serif"],
-      },
-    },
-  },
-  plugins: [require("tailwindcss-animate")],
+// Di halaman login
+export default function LoginPage() {
+  return (
+    <LayoutAuth title="Masuk" description="Masuk ke akun KostKu Anda">
+      <LoginForm />
+    </LayoutAuth>
+  );
 }
-export default config
-```
 
-#### Create `.env.local` template:
-```env
-# App
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-NEXT_PUBLIC_APP_NAME=KostKu
-
-# Supabase (to be filled later)
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
-
-# Midtrans (to be filled later)
-NEXT_PUBLIC_MIDTRANS_CLIENT_KEY=
-MIDTRANS_SERVER_KEY=
-MIDTRANS_IS_PRODUCTION=false
-
-# Resend Email (to be filled later)
-RESEND_API_KEY=
-RESEND_FROM_EMAIL=noreply@kostku.id
-
-# Note: Use NEXT_PUBLIC_ only for client-side variables
-```
-
-#### Create `.prettierrc`:
-```json
-{
-  "semi": false,
-  "singleQuote": true,
-  "tabWidth": 2,
-  "trailingComma": "es5",
-  "plugins": ["prettier-plugin-tailwindcss"]
+// Di halaman dashboard owner
+export default function OwnerDashboardPage() {
+  return (
+    <LayoutOwner userName="John" userEmail="john@example.com">
+      <DashboardContent />
+    </LayoutOwner>
+  );
 }
 ```
 
-#### Create `tsconfig.json` (Next.js 15 optimized):
-Pastikan tsconfig.json sudah include:
-- `"target": "ES2017"` atau lebih tinggi
-- `"lib": ["dom", "dom.iterable", "esnext"]`
-- `"module": "esnext"`
-- `"moduleResolution": "bundler"`
-- `"jsx": "preserve"`
+---
 
-**Checklist:**
-- [ ] Create next.config.ts (Next.js 15 + TypeScript)
-- [ ] Update tailwind.config.ts (brand colors)
-- [ ] Create .env.local template
-- [ ] Create .prettierrc
-- [ ] Verify tsconfig.json (Next.js 15 compatible)
+## 📁 Detail Implementasi Setiap Layout
 
-### 7. i18n Setup (next-intl v4 + Next.js 16)
+### 1. `components/layouts/layout-auth.tsx`
 
-#### Create `i18n/config.ts`:
-```typescript
-export const locales = ['id', 'en'] as const
-export const defaultLocale = 'id' as const
-export type Locale = (typeof locales)[number]
+**Deskripsi:** Layout sederhana center-aligned untuk halaman auth. Full screen dengan card di tengah.
+
+**Props:**
+| Prop | Type | Default | Deskripsi |
+|------|------|---------|-----------|
+| `children` | `ReactNode` | — | Konten form (required) |
+| `title` | `string` | — | Judul halaman (contoh: "Masuk", "Daftar") |
+| `description` | `string` | `"KostKu"` | Deskripsi di bawah judul |
+| `showLogo` | `boolean` | `true` | Tampilkan logo KostKu di atas |
+| `footer` | `ReactNode` | `undefined` | Footer di bawah card (contoh: link "Belum punya akun?") |
+
+**Struktur:**
+```
+┌──────────────────────────────────┐
+│                                  │
+│          [Logo KostKu]          │  ← showLogo=true
+│                                  │
+│        ┌──────────────┐          │
+│        │   Card Title  │          │  ← title prop
+│        │  Description  │          │  ← description prop
+│        │               │          │
+│        │   {children}  │          │  ← form content
+│        │               │          │
+│        └──────────────┘          │
+│                                  │
+│          {footer}                │  ← footer prop
+│                                  │
+└──────────────────────────────────┘
 ```
 
-#### Create `i18n/request.ts` (next-intl v4 pattern for Next.js 16):
-```typescript
-import { getRequestConfig } from 'next-intl/server';
-import { notFound } from 'next/navigation';
-import { locales, type Locale } from './config';
+**Kode:**
+```tsx
+"use client";
 
-export default getRequestConfig(async ({ locale }) => {
-  // Validate that the incoming locale is valid
-  if (!locales.includes(locale as Locale)) notFound();
- 
-  return {
-    messages: (await import(`./messages/${locale}.json`)).default,
-    timeZone: 'Asia/Jakarta',
-    now: new Date(),
-  };
-});
+import { ReactNode } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
+interface LayoutAuthProps {
+  children: ReactNode;
+  title?: string;
+  description?: string;
+  showLogo?: boolean;
+  footer?: ReactNode;
+}
+
+export function LayoutAuth({
+  children,
+  title,
+  description = "KostKu",
+  showLogo = true,
+  footer,
+}: LayoutAuthProps) {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <div className="w-full max-w-md">
+        {showLogo && (
+          <div className="mb-8 text-center">
+            <h1 className="text-3xl font-bold text-primary">KostKu</h1>
+            <p className="text-muted-foreground">Manajemen Kost Terbaik</p>
+          </div>
+        )}
+
+        <Card>
+          {title && (
+            <CardHeader className="text-center">
+              <CardTitle className="text-2xl">{title}</CardTitle>
+              <CardDescription>{description}</CardDescription>
+            </CardHeader>
+          )}
+          <CardContent>{children}</CardContent>
+        </Card>
+
+        {footer && (
+          <div className="mt-4 text-center text-sm text-muted-foreground">
+            {footer}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 ```
 
-#### Create `i18n/messages/id.json`:
+---
+
+### 2. `components/layouts/layout-dashboard.tsx`
+
+**Deskripsi:** Base layout dashboard dengan sidebar, header, dan main content area. Ini adalah layout utama yang di-extend oleh LayoutOwner, LayoutAdmin, dan LayoutTenant.
+
+**Props:**
+| Prop | Type | Default | Deskripsi |
+|------|------|---------|-----------|
+| `children` | `ReactNode` | — | Konten halaman (required) |
+| `navItems` | `NavItem[]` | — | Daftar navigasi sidebar (required) |
+| `userRole` | `"owner" \| "admin" \| "tenant"` | — | Role user untuk badge (required) |
+| `userName` | `string` | `"User"` | Nama user untuk avatar |
+| `userEmail` | `string` | `""` | Email user untuk dropdown |
+
+**Tipe `NavItem`:**
+```ts
+interface NavItem {
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;   // key i18n, contoh: "navigation.dashboard"
+  href: string;    // route path, contoh: "/owner/dashboard"
+}
+```
+
+**Struktur:**
+```
+┌──────────┬─────────────────────────────────┐
+│          │  [☰ Mobile]  🔔 [Avatar ▼]    │ ← Header
+│  [Logo]  ├─────────────────────────────────┤
+│  KostKu  │                                 │
+│  [owner] │                                 │
+│          │                                 │
+│  Nav 1   │         {children}             │ ← Main Content
+│  Nav 2   │                                 │
+│  Nav 3   │                                 │
+│  Nav 4   │                                 │
+│  Nav 5   │                                 │
+│          │                                 │
+│ [Locale] │                                 │ ← Locale Switcher
+└──────────┴─────────────────────────────────┘
+     ↑ Sidebar (desktop only, mobile = Sheet)
+```
+
+**Kode:** Lihat file lengkap di bagian implementasi (Phase 2B di bawah). Komponen ini menggunakan `useTranslations()` dari next-intl dan `Link` dari `@/i18n/navigation`.
+
+---
+
+### 3. `components/layouts/layout-owner.tsx`
+
+**Deskripsi:** Layout khusus role Owner. Meng-extend LayoutDashboard dengan navigation items default untuk owner.
+
+**Props:**
+| Prop | Type | Default | Deskripsi |
+|------|------|---------|-----------|
+| `children` | `ReactNode` | — | Konten halaman (required) |
+| `userName` | `string` | `"User"` | Nama user |
+| `userEmail` | `string` | `""` | Email user |
+
+**Navigation Items Default (Owner):**
+| Icon | Label Key | Route |
+|------|-----------|-------|
+| 🏠 | `navigation.dashboard` | `/owner/dashboard` |
+| 🏢 | `navigation.kosts` | `/owner/kosts` |
+| 👥 | `navigation.tenants` | `/owner/tenants` |
+| 💳 | `navigation.payments` | `/owner/payments` |
+| 📊 | `navigation.reports` | `/owner/reports` |
+| ⚙️ | `navigation.settings` | `/owner/settings` |
+
+**Kode:**
+```tsx
+import { LayoutDashboard } from "./layout-dashboard";
+import { Home, Building, Users, CreditCard, BarChart3, Settings } from "lucide-react";
+
+const ownerNavItems = [
+  { icon: Home, label: "navigation.dashboard", href: "/owner/dashboard" },
+  { icon: Building, label: "navigation.kosts", href: "/owner/kosts" },
+  { icon: Users, label: "navigation.tenants", href: "/owner/tenants" },
+  { icon: CreditCard, label: "navigation.payments", href: "/owner/payments" },
+  { icon: BarChart3, label: "navigation.reports", href: "/owner/reports" },
+  { icon: Settings, label: "navigation.settings", href: "/owner/settings" },
+];
+
+interface LayoutOwnerProps {
+  children: React.ReactNode;
+  userName?: string;
+  userEmail?: string;
+}
+
+export function LayoutOwner({ children, userName, userEmail }: LayoutOwnerProps) {
+  return (
+    <LayoutDashboard
+      navItems={ownerNavItems}
+      userRole="owner"
+      userName={userName}
+      userEmail={userEmail}
+    >
+      {children}
+    </LayoutDashboard>
+  );
+}
+```
+
+---
+
+### 4. `components/layouts/layout-admin.tsx`
+
+**Deskripsi:** Layout khusus role Admin. Sama seperti LayoutOwner tapi dengan navigation items yang berbeda.
+
+**Navigation Items Default (Admin):**
+| Icon | Label Key | Route |
+|------|-----------|-------|
+| 🏠 | `navigation.dashboard` | `/admin/dashboard` |
+| 👥 | `navigation.tenants` | `/admin/tenants` |
+| 💳 | `navigation.payments` | `/admin/payments` |
+| 🔧 | `navigation.maintenance` | `/admin/maintenance` |
+| 📢 | `navigation.announcements` | `/admin/announcements` |
+
+**Kode:** Struktur sama dengan `layout-owner.tsx`, hanya berbeda `navItems` dan `userRole="admin"`.
+
+---
+
+### 5. `components/layouts/layout-tenant.tsx`
+
+**Deskripsi:** Layout khusus role Tenant. Sidebar lebih sederhana karena tenant punya akses lebih sedikit.
+
+**Navigation Items Default (Tenant):**
+| Icon | Label Key | Route |
+|------|-----------|-------|
+| 🏠 | `navigation.dashboard` | `/tenant/dashboard` |
+| 💳 | `navigation.payments` | `/tenant/payments` |
+| 📋 | `navigation.history` | `/tenant/history` |
+| 🔧 | `navigation.maintenance` | `/tenant/maintenance` |
+
+**Kode:** Struktur sama dengan `layout-owner.tsx`, hanya berbeda `navItems` dan `userRole="tenant"`.
+
+---
+
+### 6. `components/layouts/layout-landing.tsx`
+
+**Deskripsi:** Layout untuk landing page/public page. Memiliki header dengan logo, locale switcher, dan auth buttons, lalu footer.
+
+**Props:**
+| Prop | Type | Default | Deskripsi |
+|------|------|---------|-----------|
+| `children` | `ReactNode` | — | Konten halaman (required) |
+| `showAuthButtons` | `boolean` | `true` | Tampilkan tombol Login/Register di header |
+
+**Struktur:**
+```
+┌──────────────────────────────────────────┐
+│  [🏠 KostKu]      [🌐 ID/EN] [Login] [Daftar] │ ← Header (sticky)
+├──────────────────────────────────────────┤
+│                                          │
+│              {children}                  │ ← Main Content
+│                                          │
+├──────────────────────────────────────────┤
+│  [🏠 KostKu]           © 2026 KostKu   │ ← Footer
+└──────────────────────────────────────────┘
+```
+
+**Kode:**
+```tsx
+"use client";
+
+import { ReactNode } from "react";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { Button } from "@/components/ui/button";
+import { LocaleSwitcher } from "@/components/shared/locale-switcher";
+import { Home } from "lucide-react";
+
+interface LayoutLandingProps {
+  children: ReactNode;
+  showAuthButtons?: boolean;
+}
+
+export function LayoutLanding({ children, showAuthButtons = true }: LayoutLandingProps) {
+  const t = useTranslations();
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
+        <div className="container flex h-16 items-center justify-between px-4 md:px-8">
+          <div className="flex items-center gap-2">
+            <Home className="h-6 w-6 text-primary" />
+            <span className="text-xl font-bold">KostKu</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <LocaleSwitcher />
+            {showAuthButtons && (
+              <>
+                <Link href="/login">
+                  <Button variant="ghost">{t("auth.login")}</Button>
+                </Link>
+                <Link href="/register">
+                  <Button>{t("landing.getStarted")}</Button>
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main>{children}</main>
+
+      {/* Footer */}
+      <footer className="border-t py-8">
+        <div className="container flex flex-col items-center justify-between gap-4 px-4 md:flex-row md:px-8">
+          <div className="flex items-center gap-2">
+            <Home className="h-5 w-5 text-primary" />
+            <span className="font-semibold">KostKu</span>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            &copy; 2026 KostKu. All rights reserved.
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+}
+```
+
+---
+
+### 7. `components/layouts/index.ts`
+
+**Central export file:**
+```ts
+export { LayoutAuth } from "./layout-auth";
+export { LayoutDashboard } from "./layout-dashboard";
+export { LayoutLanding } from "./layout-landing";
+export { LayoutOwner } from "./layout-owner";
+export { LayoutAdmin } from "./layout-admin";
+export { LayoutTenant } from "./layout-tenant";
+
+// Export types juga
+export type { NavItem } from "./layout-dashboard";
+```
+
+---
+
+## 📝 Tahapan Implementasi
+
+### Phase 1: Buat Folder dan File Layout (30 menit)
+
+**Langkah-langkah:**
+
+1. Buat folder `components/layouts/`
+   ```bash
+   mkdir -p components/layouts
+   ```
+
+2. Buat file `components/layouts/layout-auth.tsx` — copy kode dari bagian Detail Implementasi di atas
+
+3. Buat file `components/layouts/layout-dashboard.tsx` — copy kode dari Detail Implementasi. Ini yang paling penting karena jadi base untuk Owner, Admin, Tenant
+
+4. Buat file `components/layouts/layout-owner.tsx` — extend LayoutDashboard dengan ownerNavItems
+
+5. Buat file `components/layouts/layout-admin.tsx` — extend LayoutDashboard dengan adminNavItems
+
+6. Buat file `components/layouts/layout-tenant.tsx` — extend LayoutDashboard dengan tenantNavItems
+
+7. Buat file `components/layouts/layout-landing.tsx` — layout untuk landing page
+
+8. Buat file `components/layouts/index.ts` — export semua layouts
+
+**Checklist Phase 1:**
+- [ ] Folder `components/layouts/` sudah dibuat
+- [ ] `layout-auth.tsx` sudah dibuat dan bisa di-compile
+- [ ] `layout-dashboard.tsx` sudah dibuat dan bisa di-compile
+- [ ] `layout-owner.tsx` sudah dibuat dan bisa di-compile
+- [ ] `layout-admin.tsx` sudah dibuat dan bisa di-compile
+- [ ] `layout-tenant.tsx` sudah dibuat dan bisa di-compile
+- [ ] `layout-landing.tsx` sudah dibuat dan bisa di-compile
+- [ ] `index.ts` sudah dibuat dengan semua export
+
+---
+
+### Phase 2: Update Halaman yang Sudah Ada (30 menit)
+
+**Langkah-langkah:**
+
+1. **Update `app/[locale]/page.tsx` (Landing Page)**
+   
+   **Sebelum:**
+   ```tsx
+   // Landing page punya layout sendiri di dalam file
+   export default function LandingPage() {
+     return (
+       <div className="min-h-screen">
+         {/* Header, Hero, Features, Footer — semua inline */}
+       </div>
+     );
+   }
+   ```
+   
+   **Sesudah:**
+   ```tsx
+   import { LayoutLanding } from "@/components/layouts";
+   
+   export default function LandingPage() {
+     return (
+       <LayoutLanding>
+         {/* Hero section */}
+         {/* Features section */}
+       </LayoutLanding>
+     );
+   }
+   ```
+
+2. **Update `app/[locale]/(auth)/login/page.tsx`**
+   
+   **Sebelum:**
+   ```tsx
+   // Login page punya Card dan form inline
+   export default function LoginPage() {
+     return (
+       <div className="flex min-h-screen items-center justify-center">
+         <Card>...</Card>
+       </div>
+     );
+   }
+   ```
+   
+   **Sesudah:**
+   ```tsx
+   import { LayoutAuth } from "@/components/layouts";
+   import { useTranslations } from "next-intl";
+   import { Link } from "@/i18n/navigation";
+   import { Input } from "@/components/ui/input";
+   import { Label } from "@/components/ui/label";
+   import { Button } from "@/components/ui/button";
+
+   export default function LoginPage() {
+     const t = useTranslations();
+
+     return (
+       <LayoutAuth
+         title={t("auth.login")}
+         description="KostKu"
+         footer={
+           <>
+             {t("auth.noAccount")}{" "}
+             <Link href="/register" className="text-primary hover:underline">
+               {t("auth.register")}
+             </Link>
+           </>
+         }
+       >
+         <form className="space-y-4">
+           <div className="space-y-2">
+             <Label htmlFor="email">{t("auth.email")}</Label>
+             <Input id="email" type="email" placeholder="name@example.com" />
+           </div>
+           <div className="space-y-2">
+             <Label htmlFor="password">{t("auth.password")}</Label>
+             <Input id="password" type="password" placeholder="••••••••" />
+           </div>
+           <Button className="w-full" type="submit">{t("auth.login")}</Button>
+         </form>
+       </LayoutAuth>
+     );
+   }
+   ```
+
+3. **Update `app/[locale]/(auth)/register/page.tsx`** — sama seperti login, wrap dengan `LayoutAuth`
+
+4. **Update `app/[locale]/(dashboard)/page.tsx`** — ganti layout inline dengan `LayoutOwner`
+
+5. **Hapus file `app/[locale]/(dashboard)/layout.tsx`** yang lama (layout sudah dipindah ke komponen)
+
+**⚠️ PENTING:** Jangan hapus `app/[locale]/(auth)/layout.tsx` dulu. Ganti isinya jadi passthrough yang hanya render `{children}`:
+
+```tsx
+// app/[locale]/(auth)/layout.tsx — jadi passthrough
+import { hasLocale } from "next-intl";
+import { notFound } from "next/navigation";
+import { routing } from "@/i18n/routing";
+
+export default async function AuthLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) notFound();
+  return <>{children}</>;
+}
+```
+
+> **Kenapa masih perlu layout.tsx?** Karena Next.js App Router memerlukan layout.tsx di setiap route segment untuk provider dan locale validation. Tapi layout-nya sekarang HANYA passthrough — semua layout visual ada di komponen `components/layouts/`.
+
+**Checklist Phase 2:**
+- [ ] Landing page sudah pakai `LayoutLanding`
+- [ ] Login page sudah pakai `LayoutAuth`
+- [ ] Register page sudah pakai `LayoutAuth`
+- [ ] Dashboard page sudah pakai `LayoutOwner`
+- [ ] `(auth)/layout.tsx` diubah jadi passthrough
+- [ ] `(dashboard)/layout.tsx` dihapus atau diubah jadi passthrough
+
+---
+
+### Phase 3: Update i18n Messages (15 menit)
+
+Tambahkan key navigasi baru yang dibutuhkan oleh layout components:
+
+**Update `i18n/messages/id.json`:**
 ```json
 {
-  "metadata": {
-    "title": "KostKu - Manajemen Kost",
-    "description": "Aplikasi manajemen kost terbaik di Indonesia"
-  },
   "navigation": {
     "dashboard": "Dashboard",
     "kosts": "Kost",
@@ -359,39 +633,17 @@ export default getRequestConfig(async ({ locale }) => {
     "payments": "Pembayaran",
     "reports": "Laporan",
     "settings": "Pengaturan",
-    "logout": "Keluar"
-  },
-  "auth": {
-    "login": "Masuk",
-    "register": "Daftar",
-    "email": "Email",
-    "password": "Password",
-    "forgotPassword": "Lupa Password?",
-    "noAccount": "Belum punya akun?",
-    "hasAccount": "Sudah punya akun?"
-  },
-  "common": {
-    "save": "Simpan",
-    "cancel": "Batal",
-    "delete": "Hapus",
-    "edit": "Edit",
-    "create": "Buat",
-    "search": "Cari",
-    "loading": "Memuat...",
-    "error": "Terjadi kesalahan",
-    "success": "Berhasil",
-    "confirm": "Konfirmasi"
+    "logout": "Keluar",
+    "maintenance": "Perbaikan",
+    "announcements": "Pengumuman",
+    "history": "Riwayat"
   }
 }
 ```
 
-#### Create `i18n/messages/en.json`:
+**Update `i18n/messages/en.json`:**
 ```json
 {
-  "metadata": {
-    "title": "KostKu - Kost Management",
-    "description": "The best boarding house management app in Indonesia"
-  },
   "navigation": {
     "dashboard": "Dashboard",
     "kosts": "Kost",
@@ -400,297 +652,187 @@ export default getRequestConfig(async ({ locale }) => {
     "payments": "Payments",
     "reports": "Reports",
     "settings": "Settings",
-    "logout": "Logout"
-  },
-  "auth": {
-    "login": "Login",
-    "register": "Register",
-    "email": "Email",
-    "password": "Password",
-    "forgotPassword": "Forgot Password?",
-    "noAccount": "Don't have an account?",
-    "hasAccount": "Already have an account?"
-  },
-  "common": {
-    "save": "Save",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "create": "Create",
-    "search": "Search",
-    "loading": "Loading...",
-    "error": "An error occurred",
-    "success": "Success",
-    "confirm": "Confirm"
+    "logout": "Logout",
+    "maintenance": "Maintenance",
+    "announcements": "Announcements",
+    "history": "History"
   }
 }
 ```
 
-#### Create `middleware.ts` (root level - Next.js 16 pattern):
-```typescript
-import createMiddleware from 'next-intl/middleware'
-import { locales, defaultLocale } from './i18n/config'
+**Checklist Phase 3:**
+- [ ] `id.json` sudah ditambah key `maintenance`, `announcements`, `history`
+- [ ] `en.json` sudah ditambah key `maintenance`, `announcements`, `history`
 
-export default createMiddleware({
-  locales,
-  defaultLocale,
-  localePrefix: 'as-needed',
-  localeDetection: true,
-})
+---
 
-export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|.*\\.png$).*)']
-}
-```
+### Phase 4: Buat Halaman Placeholder Baru (30 menit)
 
-**Checklist:**
-- [ ] Create i18n config
-- [ ] Create request.ts (next-intl v4 pattern)
-- [ ] Create ID messages
-- [ ] Create EN messages
-- [ ] Setup middleware.ts (Next.js 16 compatible)
-- [ ] Update root layout untuk next-intl v4
+Sekarang dengan layout components, buat halaman placeholder baru:
 
-### 8. Base Layout & Global Styles (Next.js 16)
+1. **`app/[locale]/(auth)/forgot-password/page.tsx`**
+   ```tsx
+   import { LayoutAuth } from "@/components/layouts";
+   import { useTranslations } from "next-intl";
+   import { Link } from "@/i18n/navigation";
+   import { Input } from "@/components/ui/input";
+   import { Label } from "@/components/ui/label";
+   import { Button } from "@/components/ui/button";
 
-#### Update `app/globals.css`:
-Pastikan sudah include:
-- Tailwind directives (v4 format dengan `@import "tailwindcss"`)
-- CSS variables untuk theming
-- Dark mode support
+   export default function ForgotPasswordPage() {
+     const t = useTranslations();
+     return (
+       <LayoutAuth
+         title="Lupa Password"
+         description="Masukkan email untuk reset password"
+         footer={
+           <Link href="/login" className="text-primary hover:underline">
+             Kembali ke halaman login
+           </Link>
+         }
+       >
+         <form className="space-y-4">
+           <div className="space-y-2">
+             <Label htmlFor="email">{t("auth.email")}</Label>
+             <Input id="email" type="email" placeholder="name@example.com" />
+           </div>
+           <Button className="w-full" type="submit">Kirim Link Reset</Button>
+         </form>
+       </LayoutAuth>
+     );
+   }
+   ```
 
-#### Update `app/layout.tsx` (Next.js 16 + next-intl v4):
-```typescript
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
-import { notFound } from "next/navigation";
-import { locales, type Locale } from "@/i18n/config";
+2. **`app/[locale]/(auth)/reset-password/page.tsx`** — serupa dengan forgot-password
 
-import "./globals.css";
+3. **Buat folder routes untuk Owner:**
+   - `app/[locale]/owner/dashboard/page.tsx` → pakai `LayoutOwner`
+   - `app/[locale]/owner/kosts/page.tsx` → pakai `LayoutOwner`
+   - `app/[locale]/owner/tenants/page.tsx` → pakai `LayoutOwner`
+   - dll.
 
-const inter = Inter({ 
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
+4. **Buat folder routes untuk Admin:**
+   - `app/[locale]/admin/dashboard/page.tsx` → pakai `LayoutAdmin`
+   - `app/[locale]/admin/tenants/page.tsx` → pakai `LayoutAdmin`
+   - dll.
 
-export const metadata: Metadata = {
-  title: "KostKu - Manajemen Kost",
-  description: "Aplikasi manajemen kost terbaik di Indonesia",
-};
+5. **Buat folder routes untuk Tenant:**
+   - `app/[locale]/tenant/dashboard/page.tsx` → pakai `LayoutTenant`
+   - `app/[locale]/tenant/payments/page.tsx` → pakai `LayoutTenant`
+   - dll.
 
-export default async function RootLayout({
-  children,
-  params: { locale },
-}: {
-  children: React.ReactNode;
-  params: { locale: string };
-}) {
-  // Validate locale
-  if (!locales.includes(locale as Locale)) notFound();
+**Contoh Owner Dashboard Page:**
+```tsx
+// app/[locale]/owner/dashboard/page.tsx
+import { LayoutOwner } from "@/components/layouts";
+import { useTranslations } from "next-intl";
 
-  // Get messages for the current locale
-  const messages = await getMessages();
+export default function OwnerDashboardPage() {
+  const t = useTranslations();
 
   return (
-    <html lang={locale} suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased`}>
-        <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
-      </body>
-    </html>
+    <LayoutOwner userName="John Doe" userEmail="john@example.com">
+      <div className="space-y-6">
+        <h1 className="text-3xl font-bold tracking-tight">
+          {t("navigation.dashboard")}
+        </h1>
+        <p className="text-muted-foreground">Welcome to KostKu</p>
+        {/* Dashboard content_placeholder */}
+      </div>
+    </LayoutOwner>
   );
 }
 ```
 
-#### Create `app/not-found.tsx`:
-Global not-found page untuk handle 404.
+**Checklist Phase 4:**
+- [ ] `forgot-password/page.tsx` sudah dibuat
+- [ ] `reset-password/page.tsx` sudah dibuat
+- [ ] Owner routes sudah dibuat (dashboard, kosts, tenants, payments, reports, settings)
+- [ ] Admin routes sudah dibuat (dashboard, tenants, payments, maintenance, announcements)
+- [ ] Tenant routes sudah dibuat (dashboard, payments, history, maintenance)
 
-#### Create `lib/utils.ts` (if not exists):
-Pastikan sudah ada cn() utility untuk className merging.
+---
 
-**Checklist:**
-- [ ] Verify globals.css (Tailwind v4 format)
-- [ ] Update layout.tsx (Next.js 15 + next-intl v3 pattern)
-- [ ] Add Inter font (Next.js 15 font optimization)
-- [ ] Add not-found.tsx
-- [ ] Verify lib/utils.ts
+### Phase 5: Testing & Verifikasi (15 menit)
 
-### 9. Placeholder Pages (Next.js 16 App Router)
+1. **Build test:** Jalankan `npm run build` dan pastikan tidak ada error
+2. **Dev test:** Jalankan `npm run dev` dan cek semua halaman
+3. **Cek halaman berikut:**
+   - `/id` — Landing page dengan LayoutLanding
+   - `/id/login` — Login dengan LayoutAuth
+   - `/id/register` — Register dengan LayoutAuth
+   - `/id/forgot-password` — Forgot password dengan LayoutAuth
+   - `/id/owner/dashboard` — Owner dashboard dengan LayoutOwner
+   - `/id/admin/dashboard` — Admin dashboard dengan LayoutAdmin
+   - `/id/tenant/dashboard` — Tenant dashboard dengan LayoutTenant
+4. **Cek responsive:** Sidebar harus collapse ke Sheet di mobile
+5. **Cek locale switcher:** Dropdown ID/EN harus berfungsi di semua layout
 
-#### Create `app/page.tsx` (Landing Page):
-- Hero section placeholder
-- Features overview placeholder
-- CTA buttons (Login/Register)
-- Simple responsive design
-- Metadata export untuk SEO
-
-#### Create `app/(auth)/login/page.tsx`:
-- Login form placeholder
-- Email & password fields
-- Link to register
-- Basic validation dengan React Hook Form + Zod
-- Metadata untuk page title
-
-#### Create `app/(auth)/register/page.tsx`:
-- Registration form placeholder
-- Role selection (Owner/Admin/Tenant)
-- Basic fields
-- Metadata untuk page title
-
-#### Create `app/(dashboard)/layout.tsx`:
-- Dashboard layout with sidebar placeholder
-- Header with user menu
-- Main content area
-- Responsive mobile menu
-- Error boundary wrapper
-
-#### Create `app/(dashboard)/page.tsx`:
-- Role-based redirect logic placeholder
-- Dashboard home content
-- Metadata dinamis berdasarkan role
-
-#### Create `app/[locale]/page.tsx` (jika menggunakan i18n routing):
-Root page yang handle locale routing.
-
-**Checklist:**
-- [ ] Landing page dengan metadata (Next.js 16 pattern)
-- [ ] Login page dengan metadata
-- [ ] Register page dengan metadata
-- [ ] Dashboard layout
-- [ ] Dashboard home dengan role-based content
-- [ ] Error boundaries (Next.js 16 Error Boundaries)
-
-### 10. Shared Components Setup
-
-#### Create `components/shared/locale-switcher.tsx`:
-Dropdown untuk ganti bahasa (ID/EN) dengan next-intl v3.
-
-#### Create `components/layouts/dashboard-sidebar.tsx`:
-Sidebar navigation placeholder dengan menu items.
-- Responsive design
-- Collapsible pada mobile
-- Active state management
-
-#### Create `components/layouts/dashboard-header.tsx`:
-Header dengan logo, user menu, notifications placeholder.
-- Mobile menu toggle
-- User dropdown
-- Notification badge placeholder
-
-#### Create `components/providers/index.tsx`:
-Combined providers component:
-- TanStack Query Provider
-- NextIntlClientProvider
-- Zustand provider (jika diperlukan)
-
-**Checklist:**
-- [ ] Locale switcher component
-- [ ] Dashboard sidebar (responsive)
-- [ ] Dashboard header
-- [ ] Mobile navigation drawer
-- [ ] Providers wrapper
-
-### 11. Additional Next.js 16 Optimizations
-
-#### Create `app/loading.tsx`:
-Global loading UI untuk suspense boundaries.
-
-#### Create `app/error.tsx`:
-Global error boundary dengan error handling (Next.js 16 Error Boundary improvements).
-
-#### Create `app/manifest.ts`:
-Generate web app manifest dynamically.
-
-#### Create `app/robots.ts`:
-Generate robots.txt dynamically.
-
-#### Create `app/sitemap.ts`:
-Generate sitemap dynamically.
-
-**Checklist:**
-- [ ] Global loading.tsx
-- [ ] Global error.tsx (Next.js 16 pattern)
-- [ ] manifest.ts (PWA ready)
-- [ ] robots.ts
-- [ ] sitemap.ts
+**Checklist Phase 5:**
+- [ ] `npm run build` berhasil tanpa error
+- [ ] `npm run dev` berjalan tanpa error
+- [ ] Landing page accessible dan LayoutLanding berfungsi
+- [ ] Login page accessible dan LayoutAuth berfungsi
+- [ ] Owner dashboard accessible dan LayoutOwner berfungsi (sidebar visible)
+- [ ] Admin dashboard accessible dan LayoutAdmin berfungsi
+- [ ] Tenant dashboard accessible dan LayoutTenant berfungsi
+- [ ] Mobile responsive — sidebar collapse ke Sheet
+- [ ] Locale switcher berfungsi di semua layout
+- [ ] Tidak ada TypeScript errors
 
 ---
 
 ## ✅ Acceptance Criteria
 
-Project dianggap complete jika:
+Task dianggap complete jika:
 
-- [ ] `npm run dev` berjalan tanpa error (Turbopack enabled by default)
-- [ ] `npm run build` berhasil tanpa error (Next.js 16 build optimizations)
-- [ ] Halaman landing accessible di `/`
-- [ ] Halaman login accessible di `/login`
-- [ ] Halaman register accessible di `/register`
-- [ ] Switch bahasa ID/EN berfungsi (next-intl v4 + Next.js 16)
-- [ ] Dashboard layout render dengan sidebar dan header
-- [ ] Responsive design berfungsi (mobile & desktop)
-- [ ] Semua shadcn components bisa di-import tanpa error
-- [ ] Tidak ada TypeScript errors
-- [ ] ESLint tidak ada critical errors
-- [ ] Hot reload berfungsi dengan baik (Turbopack - faster than webpack)
-
----
-
-## 📚 References (Context7 Verified)
-
-- **Next.js 16 Documentation**: https://nextjs.org/docs (via Context7)
-- **Next.js 16 Upgrade Guide**: https://nextjs.org/docs/app/building-your-application/upgrading
-- **shadcn/ui v4 + Tailwind v4**: https://ui.shadcn.com/docs (via Context7 - May 2025 update)
-- **Tailwind CSS 4**: https://tailwindcss.com/docs
-- **next-intl v4**: https://next-intl-docs.vercel.app/docs/getting-started/app-router
-- **TanStack Query v5**: https://tanstack.com/query/latest
-- **Zustand v5**: https://docs.pmnd.rs/zustand/getting-started/introduction
-- **React 19**: https://react.dev/blog
+- [ ] Folder `components/layouts/` sudah dibuat dengan 6 file layout + 1 index.ts
+- [ ] Setiap layout component bisa di-import dari `@/components/layouts`
+- [ ] `LayoutAuth` bisa dipakai di login, register, forgot-password, reset-password
+- [ ] `LayoutDashboard` punya props `navItems`, `userRole`, `userName`, `userEmail`
+- [ ] `LayoutOwner` extend `LayoutDashboard` dengan owner nav items
+- [ ] `LayoutAdmin` extend `LayoutDashboard` dengan admin nav items
+- [ ] `LayoutTenant` extend `LayoutDashboard` dengan tenant nav items
+- [ ] `LayoutLanding` punya sticky header + footer + locale switcher
+- [ ] Semua halaman yang ada sudah menggunakan layout components baru
+- [ ] Old layout files (route groups) sudah di-cleanup
+- [ ] `npm run build` berhasil tanpa error
+- [ ] `npm run dev` berjalan tanpa error
+- [ ] Responsive design berfungsi (mobile sidebar → Sheet)
+- [ ] Locale switcher berfungsi di semua layout
 
 ---
 
-## 🚀 Next Steps After Completion
+## 📊 Perbandingan Sebelum vs Sesudah
 
-1. **Week 1 Day 3-7:** Implementasi Authentication dengan Supabase
-2. **Week 2:** Core Management Features (Kost, Room, Tenant)
-3. **Week 3:** Payment Integration (Midtrans)
-4. **Week 4:** Polish & Deployment
+| Aspek | Sebelum (Route Groups) | Sesudah (Layout Components) |
+|-------|------------------------|----------------------------|
+| **Reusability** | Layout terikat ke folder route | Layout reusable di mana saja |
+| **Flexibility** | Susah di-override | Mudah customize via props |
+| **Maintenance** | Layout tersebar di folder | Semua layout di `components/layouts/` |
+| **Junior Friendly** | Perlu pahami Next.js routing | Cuma import component + wrap children |
+| **Testing** | Susah test layout terpisah | Layout bisa di-test individual |
+| **New Page** | Perlu pahami folder structure | Import layout, wrap children, selesai |
+| **Props** | Tidak bisa pass props ke layout | Bisa pass title, footer, userName, dll |
 
 ---
 
-## 📝 Notes for Developer (Context7 Verified Latest)
+## 📚 References
 
-### Next.js 16 Key Changes (via Context7):
-- **Turbopack**: Dev server menggunakan Turbopack secara default (significantly faster than webpack)
-- **React 19**: Full support React 19 with new features
-- **Partial Prerendering (PPR)**: Now stable in Next.js 16 (was experimental in 15)
-- **Dynamic IO**: Now stable in Next.js 16 (was experimental in 15)
-- **Caching**: Simplified caching model - `dynamicIO` untuk dynamic-only routes
-- **Upgraded Codemod**: Use `npx @next/codemod@latest` untuk upgrade otomatis
+- **Next.js 16 Layouts**: https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts
+- **React Component Patterns**: https://react.dev/learn/passing-props-to-a-component
+- **shadcn/ui Components**: https://ui.shadcn.com/docs
+- **next-intl Navigation**: https://next-intl-docs.vercel.app/docs/navigation
+- **Lucide Icons**: https://lucide.dev/icons
 
-### Tailwind CSS 4 Key Changes (via Context7):
-- **CSS-first configuration**: Konfigurasi via CSS `@theme` directive
-- **@theme inline**: Support inline theme customization
-- **Faster build times**: Optimized untuk production builds
-- **Zero JavaScript runtime**: Smaller bundle size
-- **shadcn v4 support**: All components updated for Tailwind v4
+---
 
-### next-intl v4 Key Changes:
-- **Next.js 16 optimized**: Full compatibility dengan Next.js 16 features
-- **Server-first approach**: Improved server-side rendering support
-- **React 19 support**: Compatible dengan React 19 features
+## ⚠️ Catatan Penting untuk Implementor
 
-### Important Reminders:
-- Pastikan Node.js version >= 20.x (recommended untuk Next.js 16)
-- Gunakan npm atau yarn secara konsisten
-- Jika ada error saat install shadcn components, cek dokumentasi terbaru shadcn v4
-- Untuk placeholder images, gunakan `https://placehold.co/` atau `https://picsum.photos`
-- Fokus pada struktur dan setup, konten detail akan diimplementasikan di issue berikutnya
-- Test `npm run build` sebelum commit untuk memastikan tidak ada error
-
-### Performance Targets (Next.js 16):
-- First Contentful Paint (FCP): < 1.0s (Turbopack advantage)
-- Time to Interactive (TTI): < 2.5s
-- Lighthouse Performance Score: > 95 (Next.js 16 optimizations)
+1. **Jangan hapus file lama sebelum file baru berfungsi** — buat file layout baru dulu, test, baru update page yang pakai layout lama
+2. **`LayoutDashboard` adalah BASE layout** — Owner, Admin, Tenant hanya extend ini dengan nav items yang berbeda
+3. **Pastikan `useTranslations()` dipanggil di client component** — semua layout menggunakan `"use client"` directive
+4. **Gunakan `Link` dari `@/i18n/navigation`** bukan dari `next/link` supaya locale routing tetap berfungsi
+5. **Sidebar mobile menggunakan `Sheet`** dari shadcn/ui — di shadcn v4, `SheetTrigger` TIDAK punya prop `asChild`, langsung wrap Button sebagai children
+6. **Setiap page harus wrap kontennya dengan layout component** — jangan taruh layout di `layout.tsx` route group, taruh di `page.tsx` langsung
+7. **Jalankan `npm run build` setiap selesai phase** untuk memastikan tidak ada error

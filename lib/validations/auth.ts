@@ -1,0 +1,16 @@
+import { z } from "zod";
+
+export const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+});
+
+export const registerSchema = z.object({
+  name: z.string().min(2),
+  email: z.string().email(),
+  password: z.string().min(6),
+  role: z.enum(["OWNER", "ADMIN", "TENANT"]),
+});
+
+export type LoginValues = z.infer<typeof loginSchema>;
+export type RegisterValues = z.infer<typeof registerSchema>;
