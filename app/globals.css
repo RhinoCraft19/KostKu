@@ -2,6 +2,14 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/* Design System Tokens */
+@import "./design-system/colors.css";
+@import "./design-system/typography.css";
+@import "./design-system/spacing.css";
+@import "./design-system/breakpoints.css";
+@import "./design-system/grid.css";
+@import "./design-system/media.css";
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

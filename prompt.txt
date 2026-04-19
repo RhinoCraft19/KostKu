@@ -1,11 +1,16 @@
 Buatkan issue.md berisi planing untuk membuat : 
 
-Front end project baru gunakan Next JS
+skrng siapakan Design System yang profesional dan prepapre untuk app ini. 
 
-Dan setup semua depedency dan libary yang digunakan dengan baik dan complete.
+buat folder untuk mengelola design system ini.dan gunakan variabl agar mudah misal:
+login-color = green / #00FF00
 
-jgn terlalu low detail hanya buat place holder pertama untuk setup project frontend. nextjs
+gitu contohnya.
 
-cukup instruksikan secara high level.
+juga pastikan semua layout dan pagenya itu mobile responsive.
 
-Nanti documnt planningnya akan digunakan oleh programmr atau model yang leebih murah untuk di implementasikan
+dan ini design systmnya : 
+1. Sistem Breakpoints (Titik Henti)Ini adalah fondasi utama. Tentukan rentang lebar layar di mana tata letak akan berubah. Gunakan pendekatan Mobile-First (desain untuk layar terkecil dulu).DeviceRange LebarDeskripsiMobile$0px - 599px$Portrait smartphone.Tablet$600px - 1023px$Tablet atau smartphone landscape.Desktop$1024px - 1439px$Laptop atau monitor standar.Wide$1440px+$Monitor besar/Ultra-wide.2. Responsive Grid SystemGunakan sistem kolom agar konten tertata rapi. Umumnya menggunakan 12-column grid karena sangat fleksibel (bisa dibagi 2, 3, 4, atau 6).Columns: Tempat konten diletakkan.Gutters: Jarak antar kolom (biasanya 16px atau 24px).Margins: Jarak aman di sisi kiri dan kanan layar.3. Tipografi FluidGunakan satuan relatif seperti rem atau em daripada px. Ini memastikan teks dapat menyesuaikan dengan pengaturan ukuran font pengguna dan skala layar.Scale: Gunakan rasio seperti Major Third atau Perfect Fourth.Line Height: Pastikan jarak antar baris tetap nyaman (biasanya $1.5 \times$ ukuran font untuk teks panjang).Contoh Aturan:H1: Mobile 32px $\rightarrow$ Desktop 48px.Body: Mobile 14px $\rightarrow$ Desktop 16px.4. Sistem Spacing (Jarak)Gunakan kelipatan 8px (8, 16, 24, 32, 40, 64) untuk menjaga ritme visual.Padding: Jarak di dalam elemen (misal: di dalam tombol).Margin: Jarak antar elemen (misal: jarak antar kartu/card).5. Komponen UI AdaptifKomponen harus berubah bentuk sesuai ruang yang tersedia:Navigation: Gunakan Hamburger Menu di mobile, dan Horizontal List di desktop.Cards: Gunakan Stacked Layout (vertikal) di mobile, dan Side-by-side (horizontal) di desktop.Buttons: Di mobile, tombol biasanya Full Width agar mudah ditekan jempol. Di desktop, tombol menggunakan ukuran Auto.6. Prinsip Gambar & MediaAgar performa web tetap cepat dan tampilan tetap tajam:Aspect Ratio: Gunakan rasio tetap (seperti 16:9 atau 4:3) agar gambar tidak "pecah" saat layar mengecil.Responsive Images: Gunakan atribut srcset agar browser hanya mengunduh ukuran gambar yang diperlukan.
+
+jeelaskan tahapan yang harus dilakukan untuk mengimplementasikan feature ini.
+Nanti document planningnya akan digunakan oleh programer atau model yang lebih murah untuk di implementasikan.

@@ -1,0 +1,132 @@
+:root {
+  /* 8pt Grid System - Spacing Scale */
+  --spacing-0: 0;
+  --spacing-px: 1px;
+  --spacing-0_5: 0.125rem;
+  --spacing-1: 0.25rem;
+  --spacing-1_5: 0.375rem;
+  --spacing-2: 0.5rem;
+  --spacing-2_5: 0.625rem;
+  --spacing-3: 0.75rem;
+  --spacing-3_5: 0.875rem;
+  --spacing-4: 1rem;
+  --spacing-5: 1.25rem;
+  --spacing-6: 1.5rem;
+  --spacing-7: 1.75rem;
+  --spacing-8: 2rem;
+  --spacing-9: 2.25rem;
+  --spacing-10: 2.5rem;
+  --spacing-11: 2.75rem;
+  --spacing-12: 3rem;
+  --spacing-14: 3.5rem;
+  --spacing-16: 4rem;
+  --spacing-20: 5rem;
+  --spacing-24: 6rem;
+  --spacing-28: 7rem;
+  --spacing-32: 8rem;
+  --spacing-36: 9rem;
+  --spacing-40: 10rem;
+  --spacing-44: 11rem;
+  --spacing-48: 12rem;
+  --spacing-52: 13rem;
+  --spacing-56: 14rem;
+  --spacing-60: 15rem;
+  --spacing-64: 16rem;
+  --spacing-72: 18rem;
+  --spacing-80: 20rem;
+  --spacing-96: 24rem;
+
+  /* Container Max Widths */
+  --container-xs: 20rem;
+  --container-sm: 24rem;
+  --container-md: 28rem;
+  --container-lg: 32rem;
+  --container-xl: 36rem;
+  --container-2xl: 42rem;
+  --container-3xl: 48rem;
+  --container-4xl: 56rem;
+  --container-5xl: 64rem;
+  --container-6xl: 72rem;
+  --container-7xl: 80rem;
+
+  /* Container Padding */
+  --container-padding: var(--spacing-4);
+  --container-padding-sm: var(--spacing-3);
+  --container-padding-md: var(--spacing-4);
+  --container-padding-lg: var(--spacing-6);
+  --container-padding-xl: var(--spacing-8);
+}
+
+@layer utilities {
+  /* Padding Utilities */
+  .p-auto {
+    padding: auto;
+  }
+
+  /* Margin Utilities */
+  .m-auto {
+    margin: auto;
+  }
+
+  .mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Gap Utilities for Flex and Grid */
+  .gap-0\.5 { gap: var(--spacing-0_5); }
+  .gap-1 { gap: var(--spacing-1); }
+  .gap-1\.5 { gap: var(--spacing-1_5); }
+  .gap-2 { gap: var(--spacing-2); }
+  .gap-2\.5 { gap: var(--spacing-2_5); }
+  .gap-3 { gap: var(--spacing-3); }
+  .gap-3\.5 { gap: var(--spacing-3_5); }
+  .gap-4 { gap: var(--spacing-4); }
+  .gap-5 { gap: var(--spacing-5); }
+  .gap-6 { gap: var(--spacing-6); }
+  .gap-7 { gap: var(--spacing-7); }
+  .gap-8 { gap: var(--spacing-8); }
+
+  /* Responsive Container */
+  .container-responsive {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--container-padding);
+    padding-right: var(--container-padding);
+  }
+
+  @media (min-width: 640px) {
+    .container-responsive {
+      max-width: var(--container-md);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .container-responsive {
+      max-width: var(--container-lg);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container-responsive {
+      max-width: var(--container-xl);
+      padding-left: var(--container-padding-lg);
+      padding-right: var(--container-padding-lg);
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .container-responsive {
+      max-width: var(--container-2xl);
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .container-responsive {
+      max-width: var(--container-4xl);
+      padding-left: var(--container-padding-xl);
+      padding-right: var(--container-padding-xl);
+    }
+  }
+}
