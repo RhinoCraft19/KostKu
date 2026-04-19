@@ -11,7 +11,10 @@
     "payments": "Pembayaran",
     "reports": "Laporan",
     "settings": "Pengaturan",
-    "logout": "Keluar"
+    "logout": "Keluar",
+    "maintenance": "Perbaikan",
+    "announcements": "Pengumuman",
+    "history": "Riwayat"
   },
   "auth": {
     "login": "Masuk",

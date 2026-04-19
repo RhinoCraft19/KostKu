@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { LocaleSwitcher } from "@/components/shared/locale-switcher";
+import { LayoutLanding } from "@/components/layouts";
 import {
   Home,
   CreditCard,
@@ -44,26 +44,7 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center justify-between px-4 md:px-8">
-          <div className="flex items-center gap-2">
-            <Home className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">KostKu</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <LocaleSwitcher />
-            <Link href="/login">
-              <Button variant="ghost">{t("auth.login")}</Button>
-            </Link>
-            <Link href="/register">
-              <Button>{t("landing.getStarted")}</Button>
-            </Link>
-          </div>
-        </div>
-      </header>
-
+    <LayoutLanding>
       {/* Hero */}
       <section className="container flex flex-col items-center justify-center gap-8 px-4 py-24 text-center md:px-8 md:py-32">
         <Badge variant="secondary" className="px-4 py-1.5 text-sm">
@@ -101,19 +82,6 @@ export default function LandingPage() {
           </Card>
         ))}
       </section>
-
-      {/* Footer */}
-      <footer className="border-t py-8">
-        <div className="container flex flex-col items-center justify-between gap-4 px-4 md:flex-row md:px-8">
-          <div className="flex items-center gap-2">
-            <Home className="h-5 w-5 text-primary" />
-            <span className="font-semibold">KostKu</span>
-          </div>
-          <p className="text-sm text-muted-foreground">
-            &copy; 2026 KostKu. All rights reserved.
-          </p>
-        </div>
-      </footer>
-    </div>
+    </LayoutLanding>
   );
 }

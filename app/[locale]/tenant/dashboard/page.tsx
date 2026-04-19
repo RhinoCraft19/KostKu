@@ -1,20 +1,20 @@
 import { useTranslations } from "next-intl";
-import { LayoutOwner } from "@/components/layouts";
+import { LayoutTenant } from "@/components/layouts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Home, Users, CreditCard, BarChart3 } from "lucide-react";
+import { Home, CreditCard, History, Wrench } from "lucide-react";
 
-export default function DashboardPage() {
+export default function TenantDashboardPage() {
   const t = useTranslations();
 
   const stats = [
-    { icon: Home, title: "Total Kost", value: "0", description: "Properties" },
-    { icon: Users, title: t("navigation.tenants"), value: "0", description: "Active" },
-    { icon: CreditCard, title: t("navigation.payments"), value: "Rp 0", description: "This month" },
-    { icon: BarChart3, title: "Occupancy", value: "0%", description: "Rate" },
+    { icon: Home, title: "Room", value: "-", description: "Current" },
+    { icon: CreditCard, title: "Due", value: "Rp 0", description: t("navigation.payments") },
+    { icon: History, title: t("navigation.history"), value: "0", description: "Transactions" },
+    { icon: Wrench, title: "Requests", value: "0", description: "Open" },
   ];
 
   return (
-    <LayoutOwner userName="John Doe" userEmail="john@example.com">
+    <LayoutTenant userName="Tenant" userEmail="tenant@example.com">
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">
@@ -27,9 +27,7 @@ export default function DashboardPage() {
           {stats.map((stat) => (
             <Card key={stat.title}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  {stat.title}
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
                 <stat.icon className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -40,6 +38,6 @@ export default function DashboardPage() {
           ))}
         </div>
       </div>
-    </LayoutOwner>
+    </LayoutTenant>
   );
 }

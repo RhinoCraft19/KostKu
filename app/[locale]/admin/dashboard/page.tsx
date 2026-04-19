@@ -1,35 +1,33 @@
 import { useTranslations } from "next-intl";
-import { LayoutOwner } from "@/components/layouts";
+import { LayoutAdmin } from "@/components/layouts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Home, Users, CreditCard, BarChart3 } from "lucide-react";
+import { Home, Users, CreditCard, Wrench } from "lucide-react";
 
-export default function DashboardPage() {
+export default function AdminDashboardPage() {
   const t = useTranslations();
 
   const stats = [
-    { icon: Home, title: "Total Kost", value: "0", description: "Properties" },
+    { icon: Home, title: "Rooms", value: "0", description: "Total" },
     { icon: Users, title: t("navigation.tenants"), value: "0", description: "Active" },
-    { icon: CreditCard, title: t("navigation.payments"), value: "Rp 0", description: "This month" },
-    { icon: BarChart3, title: "Occupancy", value: "0%", description: "Rate" },
+    { icon: CreditCard, title: "Pending", value: "0", description: "Payments" },
+    { icon: Wrench, title: "Requests", value: "0", description: "Open" },
   ];
 
   return (
-    <LayoutOwner userName="John Doe" userEmail="john@example.com">
+    <LayoutAdmin userName="Admin" userEmail="admin@kostku.id">
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">
             {t("navigation.dashboard")}
           </h1>
-          <p className="text-muted-foreground">Welcome to KostKu</p>
+          <p className="text-muted-foreground">Admin dashboard</p>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat) => (
             <Card key={stat.title}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  {stat.title}
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
                 <stat.icon className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -40,6 +38,6 @@ export default function DashboardPage() {
           ))}
         </div>
       </div>
-    </LayoutOwner>
+    </LayoutAdmin>
   );
 }

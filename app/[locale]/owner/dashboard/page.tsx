@@ -1,9 +1,15 @@
 import { useTranslations } from "next-intl";
-import { LayoutOwner } from "@/components/layouts";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Home, Users, CreditCard, BarChart3 } from "lucide-react";
+import { LayoutOwner } from "@/components/layouts";
 
-export default function DashboardPage() {
+export default function OwnerDashboardPage() {
   const t = useTranslations();
 
   const stats = [

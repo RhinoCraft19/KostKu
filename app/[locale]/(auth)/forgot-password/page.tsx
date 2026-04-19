@@ -5,37 +5,28 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LayoutAuth } from "@/components/layouts";
 
-export default function LoginPage() {
-  const t = useTranslations();
-
+export default function ForgotPasswordPage() {
   return (
     <LayoutAuth
-      title={t("auth.login")}
-      description="KostKu"
+      title="Lupa Password"
+      description="Masukkan email untuk reset password"
       footer={
-        <>
-          {t("auth.noAccount")}{" "}
-          <Link href="/register" className="text-primary hover:underline">
-            {t("auth.register")}
-          </Link>
-        </>
+        <Link href="/login" className="text-primary hover:underline">
+          Kembali ke halaman login
+        </Link>
       }
     >
       <form className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="email">{t("auth.email")}</Label>
+          <Label htmlFor="email">Email</Label>
           <Input
             id="email"
             type="email"
             placeholder="name@example.com"
           />
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="password">{t("auth.password")}</Label>
-          <Input id="password" type="password" placeholder="••••••••" />
-        </div>
         <Button className="w-full" type="submit">
-          {t("auth.login")}
+          Kirim Link Reset
         </Button>
       </form>
     </LayoutAuth>

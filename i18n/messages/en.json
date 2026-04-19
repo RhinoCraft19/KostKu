@@ -11,7 +11,10 @@
     "payments": "Payments",
     "reports": "Reports",
     "settings": "Settings",
-    "logout": "Logout"
+    "logout": "Logout",
+    "maintenance": "Maintenance",
+    "announcements": "Announcements",
+    "history": "History"
   },
   "auth": {
     "login": "Login",
