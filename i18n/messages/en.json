@@ -1,0 +1,51 @@
+{
+  "metadata": {
+    "title": "KostKu - Kost Management",
+    "description": "The best boarding house management app in Indonesia"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "kosts": "Kost",
+    "rooms": "Rooms",
+    "tenants": "Tenants",
+    "payments": "Payments",
+    "reports": "Reports",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "confirm": "Confirm"
+  },
+  "landing": {
+    "heroTitle": "Manage Your Kost Effortlessly",
+    "heroDescription": "The most complete kost management platform in Indonesia. Manage rooms, tenants, payments, and financial reports in one app.",
+    "getStarted": "Get Started",
+    "login": "Login",
+    "feature1Title": "Room Management",
+    "feature1Desc": "Manage rooms and facilities with ease",
+    "feature2Title": "Online Payments",
+    "feature2Desc": "Accept payments via Midtrans & manual transfer",
+    "feature3Title": "Financial Reports",
+    "feature3Desc": "Monitor income and expenses in real-time",
+    "feature4Title": "Multi-Role",
+    "feature4Desc": "Access for owners, admins, and tenants"
+  }
+}
