@@ -1,0 +1,11 @@
+Buatkan issue.md berisi planing untuk membuat : 
+
+Front end project baru gunakan Next JS
+
+Dan setup semua depedency dan libary yang digunakan dengan baik dan complete.
+
+jgn terlalu low detail hanya buat place holder pertama untuk setup project frontend. nextjs
+
+cukup instruksikan secara high level.
+
+Nanti documnt planningnya akan digunakan oleh programmr atau model yang leebih murah untuk di implementasikan
